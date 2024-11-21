@@ -6,3 +6,4 @@ Equipments:
 • Nuvoton M032SE3AE Demo Board
 • E1-4036AUR1-CT Seven Segment
 • Several resistors
+• 4 pin push button
