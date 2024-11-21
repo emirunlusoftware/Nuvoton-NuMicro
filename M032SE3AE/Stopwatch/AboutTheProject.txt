@@ -1,0 +1,8 @@
+THIS PROJECT WAS ORIGINALLY MADE ON 23 JULY 2024.
+
+In this project, a four-digit Seven Segment display was programmed to use this as a stopwatch.
+
+Equipments:
+• Nuvoton M032SE3AE Demo Board
+• E1-4036AUR1-CT Seven Segment
+• Several resistors
