@@ -1,0 +1,12 @@
+In this project, we read 8-bit data from TH06 Temperature & Humidity sensor connected to M031TC1AE Demo Board via I²C communication protocole. Then we sent this data to the second board which is M032SE3AE Demo Board via UART communication. The received data is then processed and displayed as temperature and humidity values on a seven-segment display. The seven segment display shows temperature for 40 seconds and then displays humidity for 20 seconds. The push button only exists to activate the seven-segment display.
+
+THIS PROJECT WAS ORIGINALLY MADE ON 1 AUGUST 2024.
+
+Equipments:
+• Nuvoton M031TC1AE Demo Board (transmitter)
+• Nuvoton M032SE3AE Demo Board (receiver)
+• TH06 Temperature & Humidity Sensor
+• E1-4036AUR1-CT Seven Segment
+• Several resistors
+• 4 pin push button
+• Docklight v2.4.11

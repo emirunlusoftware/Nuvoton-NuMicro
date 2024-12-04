@@ -1,0 +1,7 @@
+THIS PROJECT WAS ORIGINALLY MADE ON 30 JULY 2024.
+
+Displays characters from keyboard input via UART serial communication protocole on the screen through Docklight software.
+
+Equipments:
+• Nuvoton M032SE3AE Demo Board
+• Docklight v2.4.11
