@@ -1,24 +1,17 @@
 #include "stdio.h"
 #include "NuMicro.h"
 
-/*#define RXBUFSIZE   256
-uint8_t g_u8RecData[RXBUFSIZE]  = {0};
-
-volatile uint32_t g_u32comRbytes = 0;
-volatile uint32_t g_u32comRhead  = 0;
-volatile uint32_t g_u32comRtail  = 0;*/
-
 /* The variables that show us the temperature and humidity values. */
-float temperature,humidity;
+float temperature, humidity;
 
 /* 16-bit variables, they're raw hexadecimal datas and will be converted to real temperature and humidity values. */
-uint16_t measured,measured2;
+uint16_t measured, measured2;
 
 /* 8-bit variables to store datas which come from TH06 Thermal Sensor. */
-uint8_t measured_t,measured_t2,measured_h,measured_h2;
+uint8_t measured_t, measured_t2, measured_h, measured_h2;
 
-int humidity_int,temperature_int,Ones,Tens,Hundreds,Thousands,TenThousands,i;
-int button_pressed,counter=0;
+int humidity_int, temperature_int, Ones, Tens, Hundreds, Thousands, TenThousands, i;
+int button_pressed = 0, counter = 0;
 
 void SYS_Init(void)
 {
@@ -82,18 +75,41 @@ void SYS_Init(void)
 	PB11 (pin 60) = DIGIT 1
 */
 
-void zero(){PB4=1; PB0=PB1=PB3=PB6=PB9=PB10=0;}
-void one(){PB0=PB1=PB4=PB9=PB10=1; PB3=PB6=0;}
-void two(){PB3=PB9=1; PB0=PB1=PB4=PB6=PB10=0;}
-void three(){PB0=PB9=1; PB1=PB3=PB4=PB6=PB10=0;}
-void four(){PB0=PB1=PB10=1; PB3=PB6=PB9=PB4=0;}
-void five(){PB0=PB6=1; PB1=PB3=PB4=PB9=PB10=0;}
-void six(){PB6=1; PB0=PB1=PB3=PB4=PB9=PB10=0;}
-void seven(){PB0=PB1=PB4=PB9=1; PB3=PB6=PB10=0;}
-void eight(){PB0=PB1=PB3=PB4=PB6=PB9=PB10=0;}
-void nine(){PB0=1; PB1=PB3=PB4=PB6=PB9=PB10=0;}
-void minus(){PB4=0; PB0=PB1=PB3=PB6=PB9=PB10=1;}
-void delay(){CLK_SysTickDelay(1000);}
+void zero()
+	{PB4=1; PB0=PB1=PB3=PB6=PB9=PB10=0;}
+
+void one()
+	{PB0=PB1=PB4=PB9=PB10=1; PB3=PB6=0;}
+
+void two()
+	{PB3=PB9=1; PB0=PB1=PB4=PB6=PB10=0;}
+
+void three()
+	{PB0=PB9=1; PB1=PB3=PB4=PB6=PB10=0;}
+
+void four()
+	{PB0=PB1=PB10=1; PB3=PB6=PB9=PB4=0;}
+
+void five()
+	{PB0=PB6=1; PB1=PB3=PB4=PB9=PB10=0;}
+
+void six()
+	{PB6=1; PB0=PB1=PB3=PB4=PB9=PB10=0;}
+
+void seven()
+	{PB0=PB1=PB4=PB9=1; PB3=PB6=PB10=0;}
+
+void eight()
+	{PB0=PB1=PB3=PB4=PB6=PB9=PB10=0;}
+
+void nine()
+	{PB0=1; PB1=PB3=PB4=PB6=PB9=PB10=0;}
+
+void minus()
+	{PB4=0; PB0=PB1=PB3=PB6=PB9=PB10=1;}
+
+void delay()
+	{CLK_SysTickDelay(1000);}
 
 void segment (int sayi)
 {
@@ -114,34 +130,36 @@ void segment (int sayi)
 
 void temperature_display (void)
 {
-	TenThousands= (temperature_int/10000)%10;
-	Thousands=		(temperature_int/1000)%10;
-	Hundreds=			(temperature_int/100)%10;
-	Tens=					(temperature_int/10)%10;
-	Ones=					 temperature_int%10;
+	TenThousands =	(temperature_int/10000)%10;
+	Thousands =	(temperature_int/1000)%10;
+	Hundreds =	(temperature_int/100)%10;
+	Tens =		(temperature_int/10)%10;
+	Ones =		temperature_int%10;
 
 	if(temperature_int >= 0)
 	{
 		if (temperature_int >= 10000)
 		{
-			PB11= 1;				segment(TenThousands); delay(); PB11= 0;
-			PB8 = 1;				segment(Thousands);		 delay();	PB8 = 0;
-			PB7 = 1; PB2=0;	segment(Hundreds);		 delay();	PB7 = 0; PB2=1;
-			PB5 = 1;				segment(Tens);				 delay();	PB5 = 0;
+			PB11= 1;				segment(TenThousands);	delay();	PB11= 0;
+			PB8 = 1;				segment(Thousands);	delay();	PB8 = 0;
+			PB7 = 1;  PB2=0;			segment(Hundreds);	delay();	PB7 = 0; PB2=1;
+			PB5 = 1;				segment(Tens);		delay();	PB5 = 0;
 		}
+
 		else if (temperature_int >= 0 && temperature_int < 1000)
 		{
 																											PB5 = 0;
-			PB11= 1; PB2=0;	segment(Hundreds);	delay();		PB11= 0; PB2 = 1;
-			PB8 = 1;				segment(Tens);			delay();		PB8 = 0;
-			PB7 = 1;				segment(Ones);			delay();		PB7 = 0;
+			PB11= 1; PB2=0;			segment(Hundreds);	delay();	PB11= 0; PB2 = 1;
+			PB8 = 1;				segment(Tens);		delay();	PB8 = 0;
+			PB7 = 1;				segment(Ones);		delay();	PB7 = 0;
 		}
+
 		else
 		{
-			PB11= 1;				segment(Thousands); delay(); PB11= 0; 
-			PB8 = 1; PB2=0;	segment(Hundreds);	delay(); PB8 = 0; PB2=1;
-			PB7 = 1;				segment(Tens);			delay(); PB7 = 0;
-			PB5 = 1;				segment(Ones);			delay(); PB5 = 0;
+			PB11= 1;				segment(Thousands);	delay();	PB11= 0; 
+			PB8 = 1;  PB2=0;			segment(Hundreds);	delay();	PB8 = 0; PB2=1;
+			PB7 = 1;				segment(Tens);		delay();	PB7 = 0;
+			PB5 = 1;				segment(Ones);		delay();	PB5 = 0;
 		}
 	}
 
@@ -149,51 +167,55 @@ void temperature_display (void)
 	{
 		if (temperature_int > -1000 && temperature_int < 0)
 		{
-			PB11= 1;				minus();					 delay(); PB11= 0;
-			PB8 = 1; PB2=0;	segment(Hundreds); delay();	PB8 = 0; PB2 = 1;
-			PB7 = 1;				segment(Tens);		 delay(); PB7 = 0;
-			PB5 = 1;				segment(Ones);		 delay(); PB5 = 0;
+			PB11= 1;				minus();			delay();	PB11= 0;
+			PB8 = 1;  PB2=0;			segment(Hundreds);	delay();	PB8 = 0; PB2 = 1;
+			PB7 = 1;				segment(Tens);		delay();	PB7 = 0;
+			PB5 = 1;				segment(Ones);		delay();	PB5 = 0;
 		}
+
 		else
 		{
-			PB11= 1;				minus();						delay(); PB11= 0;
-			PB8 = 1;				segment(Thousands); delay(); PB8 = 0;
-			PB7 = 1; PB2=0;	segment(Hundreds);	delay(); PB7 = 0; PB2 = 1;
-			PB5 = 1;				segment(Tens);			delay(); PB5 = 0;
+			PB11= 1;				minus();			delay();	PB11= 0;
+			PB8 = 1;				segment(Thousands);	delay();	PB8 = 0;
+			PB7 = 1;  PB2=0;			segment(Hundreds);	delay();	PB7 = 0; PB2 = 1;
+			PB5 = 1;				segment(Tens);		delay();	PB5 = 0;
 		}
 	}
 }
 
 void humidity_display (void)
 {
-	TenThousands= (humidity_int/10000)%10;
-	Thousands=		(humidity_int/1000)%10;
-	Hundreds=			(humidity_int/100)%10;
-	Tens=					(humidity_int/10)%10;
-	Ones=					 humidity_int%10;
+	TenThousands =	(humidity_int/10000)%10;
+	Thousands =	(humidity_int/1000)%10;
+	Hundreds =	(humidity_int/100)%10;
+	Tens =		(humidity_int/10)%10;
+	Ones =		humidity_int%10;
 
 	if (humidity_int >= 100)
 	{
-														 PB5 = 0; PB2 = 1;
-		PB11= 1;				one();	delay();  PB11= 0;
-		PB8 = 1;				zero(); delay();	PB8 = 0;
-		PB7 = 1;				zero(); delay();	PB7 = 0;
+								PB5 = 0; PB2 = 1;
+		PB11= 1;			one();		delay(); 	PB11= 0;
+		PB8 = 1;			zero();		delay();	PB8 = 0;
+		PB7 = 1;			zero();		delay();	PB7 = 0;
 	}
+
 	else if (humidity_int >= 0 && humidity_int < 10)
 	{
-												PB8 = PB7 = PB5 = 0; PB2 = 1;
-		PB11= 1;				segment(Ones); delay();  PB11= 0;
+								PB8 = PB7 = PB5 = 0; PB2 = 1;
+		PB11= 1;			segment(Ones);	delay(); 	PB11= 0;
 	}
+
 	else if (humidity_int < 0)
 	{
-												PB8 = PB7 = PB5 = 0; PB2 = 1;
-		PB11= 1;								zero(); delay(); PB11= 0;
+								PB8 = PB7 = PB5 = 0; PB2 = 1;
+		PB11= 1;			zero(); 		delay();	PB11= 0;
 	}
+
 	else
 	{
-														 PB7 = PB5 = 0; PB2 = 1;
-		PB11= 1;				segment(Tens); delay(); PB11= 0;
-		PB8 = 1;				segment(Ones); delay(); PB8 = 0;
+								PB7 = PB5 = 0; PB2 = 1;
+		PB11= 1;			segment(Tens);	delay();	PB11= 0;
+		PB8 = 1;			segment(Ones);	delay();	PB8 = 0;
 	}
 }
 
@@ -228,7 +250,7 @@ int main(void)
 	UART_Open(UART0,115200);
 
 	/* Wait until PA11 (button) is pressed */
-	while(button_pressed==0);
+	while(button_pressed == 0);
 	
 	/* Enable Timer Interrupt for counting */
 	TIMER_Open(TIMER0,TIMER_PERIODIC_MODE,1);
@@ -269,7 +291,7 @@ int main(void)
 
 		/* Start the display function. The function that displays the temperature or humidity values on the four digit seven segment */
 		/* "for loop" is for processing this function longer */
-		for (i=0;i<200;i++)
+		for (i = 0; i < 200; i++)
 		{
 			if (counter >= 0 && counter < 40 && temperature_int >= -4675) {temperature_display();}
 			else if (counter >= 40 && counter < 60) {humidity_display();}
